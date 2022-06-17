@@ -3,23 +3,24 @@ mkdir -p $USER_CODE_DIR/test
 mv $TEST_FILE_NAME $USER_CODE_DIR/test
 
 # run hardhat testing util assuming we have correct mocha settings
+cd $USER_CODE_DIR
 yarn --silent hardhat test > $UNIT_TEST_OUTPUT_FILE
 
 # run a light node script to extract out results and write them back in expected format
 
-cat << EOF
-const payload = require(process.env.UNIT_TEST_OUTPUT_FILE)
-const answers = []
-payload.tests.forEach((result, i) => {
+cat > /home/damner/.test/process-results.js << EOF
+const fs = require('fs')
+const payload = JSON.parse(fs.readFileSync(process.env.UNIT_TEST_OUTPUT_FILE, { encoding: 'utf8' }))
+const answers = payload?.tests?.map((result, i) => {
     if(result.err.stack) {
-        answers.push(false)
         console.error(result.err.message)
+        return false
     } else {
-        answers.push(true)
-        console.log(`Test ${i} passed`)
+        console.log(\`Test ${i} passed\`)
+        return true
     }
-})
-require('fs').writeFileSync(process.env.UNIT_TEST_OUTPUT_FILE, JSON.stringify(answers))
-EOF > /home/damner/.test/process-results.js
+}) || []
+fs.writeFileSync(process.env.UNIT_TEST_OUTPUT_FILE, JSON.stringify(answers))
+EOF
 
 node /home/damner/.test/process-results.js
