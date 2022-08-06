@@ -10,7 +10,8 @@ yarn --silent hardhat test > $UNIT_TEST_OUTPUT_FILE
 
 cat > /home/damner/.test/process-results.js << EOF
 const fs = require('fs')
-const payload = JSON.parse(fs.readFileSync(process.env.UNIT_TEST_OUTPUT_FILE, { encoding: 'utf8' }))
+const fileData = fs.readFileSync(process.env.UNIT_TEST_OUTPUT_FILE, { encoding: 'utf8' })
+const payload = JSON.parse(fileData.slice(fileData.indexOf('{')))
 const answers = payload?.tests?.map((result, i) => {
     if(result.err.stack) {
         console.error(result.err.message)
