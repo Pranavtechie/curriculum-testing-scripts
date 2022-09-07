@@ -2,6 +2,7 @@
 set -e 1
 
 # Assumes you are running a node.js playground on codedamn
+# !Important! Read this guide here: https://teach.codedamn.com/technologies/html-css
 
 # Install vitest and testing util
 cd /home/damner/code
