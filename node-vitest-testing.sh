@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e 1
 
-# Assumes you are running a react vite playground on codedamn
+# Assumes you are running a node.js playground on codedamn
 
 # Install vitest and testing util
 cd /home/damner/code
