@@ -36,3 +36,8 @@ parseString(xmlFile, (err, data) => {
 
     fs.writeFileSync(process.env.UNIT_TEST_OUTPUT_FILE, JSON.stringify(results))
 })
+EOF
+
+# Run the node script to write results to playground UI
+cd /home/damner/.javatest
+node processJavaResults.js
